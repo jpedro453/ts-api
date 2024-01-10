@@ -14,8 +14,10 @@ const makeSut = (): ISutTypes => {
             return true
         }
     }
+
     const emailValidatorStub = new EmailValidatorStub()
     const sut = new SignUpController(emailValidatorStub)
+
     return {
         sut,
         emailValidatorStub,
@@ -85,5 +87,22 @@ describe('SignUp Controller', () => {
 
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toEqual(new InvalidParamError('email'))
+    })
+    test('Should call emailValidator with correct email', () => {
+        const { sut, emailValidatorStub } = makeSut()
+
+        const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
+
+        const httpRequest = {
+            body: {
+                name: 'name',
+                email: 'any_email@mail.com',
+                password: 'pwd',
+                password_confirmation: 'pwd',
+            },
+        }
+        sut.handle(httpRequest)
+
+        expect(isValidSpy).toHaveBeenCalledWith(httpRequest.body.email)
     })
 })
