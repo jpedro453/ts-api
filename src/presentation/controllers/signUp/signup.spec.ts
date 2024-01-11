@@ -1,11 +1,11 @@
 import { SignUpController } from './signup'
-import { MissingParamError, InvalidParamError, ServerError } from '../errors'
-import { IEmailValidator } from '../protocols'
-import { IAccountModel } from '../../domain/models/account'
+import { MissingParamError, InvalidParamError, ServerError } from '../../errors'
 import {
+    IEmailValidator,
     IAddAccountModel,
     IAddAccount,
-} from '../../domain/useCases/add-account'
+    IAccountModel,
+} from './signup-protocols'
 
 interface ISutTypes {
     sut: SignUpController
@@ -179,6 +179,7 @@ describe('SignUp Controller', () => {
                 password_confirmation: 'pwd',
             },
         }
+
         sut.handle(httpRequest)
 
         expect(addSpy).toHaveBeenCalledWith({
