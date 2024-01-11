@@ -1,4 +1,4 @@
-import { badRequest, serverError } from '../../helpers/http-helper'
+import { badRequest, ok, serverError } from '../../helpers/http-helper'
 import {
     IController,
     IHttpRequest,
@@ -32,12 +32,9 @@ export class SignUpController implements IController {
                     return badRequest(new MissingParamError(field))
                 }
             }
-            const { name, email, password, password_confirmation } =
+            const { id, name, email, password, password_confirmation } =
                 httpRequest.body
-            if (
-                httpRequest.body.password !==
-                httpRequest.body.password_confirmation
-            ) {
+            if (password != password_confirmation) {
                 return badRequest(
                     new InvalidParamError('password_confirmation')
                 )
@@ -47,11 +44,14 @@ export class SignUpController implements IController {
                 return badRequest(new InvalidParamError('email'))
             }
 
-            this.addAccount.add({
+            const account = this.addAccount.add({
+                id,
                 name,
                 email,
                 password,
             })
+
+            return ok(account)
         } catch (error) {
             return serverError(new ServerError())
         }
