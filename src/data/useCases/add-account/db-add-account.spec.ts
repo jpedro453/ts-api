@@ -1,9 +1,16 @@
 import { DbAddAccount } from './db-add-acount'
-import { IEncrypter } from './db-add-account-protocols'
+import {
+    IAccountModel,
+    IAddAccount,
+    IAddAccountModel,
+    IEncrypter,
+    IAddAccountRepository,
+} from './db-add-account-protocols'
 
 interface ISutTypes {
     encrypterStub: IEncrypter
     sut: DbAddAccount
+    addAccountRepositoryStub: IAddAccountRepository
 }
 
 const makeEncrypter = (): IEncrypter => {
@@ -15,13 +22,30 @@ const makeEncrypter = (): IEncrypter => {
     return new EncrypterStub()
 }
 
+const makeAddAccountRepository = (): IAddAccountRepository => {
+    class AddAccountRepositoryStub implements IAddAccountRepository {
+        async add(accountData: IAddAccountModel): Promise<IAccountModel> {
+            const fakeAccount = {
+                id: 'valid_id',
+                name: 'valid_name',
+                email: 'valid_email',
+                password: 'hashed_pwd',
+            }
+            return new Promise((resolve) => resolve(fakeAccount))
+        }
+    }
+    return new AddAccountRepositoryStub()
+}
+
 const makeSut = (): ISutTypes => {
     const encrypterStub = makeEncrypter()
-    const sut = new DbAddAccount(encrypterStub)
+    const addAccountRepositoryStub = makeAddAccountRepository()
+    const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub)
 
     return {
         sut,
         encrypterStub,
+        addAccountRepositoryStub,
     }
 }
 
@@ -55,5 +79,23 @@ describe('DbAddAccount useCase', () => {
 
         const promise = sut.add(accountData)
         await expect(promise).rejects.toThrow()
+    })
+    test('Should call AddAccountRepository with correct values', async () => {
+        const { sut, addAccountRepositoryStub } = makeSut()
+
+        const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
+
+        const accountData = {
+            name: 'valid_name',
+            email: 'valid_email',
+            password: 'valid_password',
+        }
+
+        await sut.add(accountData)
+        expect(addSpy).toHaveBeenCalledWith({
+            name: 'valid_name',
+            email: 'valid_email',
+            password: 'hashed_pwd',
+        })
     })
 })
