@@ -17,6 +17,7 @@
     "devDependencies": {
         "@types/bcrypt": "^5.0.2",
         "@types/jest": "^29.5.11",
+        "@types/mongodb": "^4.0.7",
         "@types/node": "^20.10.8",
         "@types/validator": "^13.11.8",
         "@typescript-eslint/eslint-plugin": "^6.18.1",
@@ -30,6 +31,7 @@
     },
     "dependencies": {
         "bcrypt": "^5.1.1",
+        "mongodb": "^6.3.0",
         "validator": "^13.11.0"
     }
 }
