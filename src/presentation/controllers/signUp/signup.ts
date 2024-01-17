@@ -1,11 +1,5 @@
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
-import {
-    IController,
-    IHttpRequest,
-    IHttpResponse,
-    IEmailValidator,
-    IAddAccount,
-} from './signup-protocols'
+import { IController, IHttpRequest, IHttpResponse, IEmailValidator, IAddAccount } from './signup-protocols'
 
 import { ServerError, InvalidParamError, MissingParamError } from '../../errors'
 
@@ -20,24 +14,17 @@ export class SignUpController implements IController {
 
     async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
         try {
-            const requiredFields = [
-                'name',
-                'email',
-                'password',
-                'password_confirmation',
-            ]
+            const requiredFields = ['name', 'email', 'password', 'password_confirmation']
 
             for (const field of requiredFields) {
                 if (!httpRequest.body[field]) {
                     return badRequest(new MissingParamError(field))
                 }
             }
-            const { id, name, email, password, password_confirmation } =
-                httpRequest.body
+            const { id, name, email, password, password_confirmation } = httpRequest.body
+
             if (password != password_confirmation) {
-                return badRequest(
-                    new InvalidParamError('password_confirmation')
-                )
+                return badRequest(new InvalidParamError('password_confirmation'))
             }
 
             if (!this.emailValidator.isValid(httpRequest.body.email)) {
@@ -47,7 +34,7 @@ export class SignUpController implements IController {
             const account = await this.addAccount.add({
                 name,
                 email,
-                password,
+                password
             })
 
             return ok(account)
