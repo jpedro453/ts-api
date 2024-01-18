@@ -1,6 +1,4 @@
 import { MongoClient, Collection } from 'mongodb'
-import * as dotenv from 'dotenv'
-dotenv.config({ path: __dirname + '/.env' })
 
 export const MongoHelper = {
     client: null as MongoClient,
@@ -12,6 +10,12 @@ export const MongoHelper = {
         if (this.client) {
             await this.client.close()
         }
+    },
+
+    map(collection: any): any {
+        const { _id, ...collectionWithoutId } = collection
+
+        return Object.assign({}, collectionWithoutId, { id: _id })
     },
 
     async getCollection(name: string): Promise<Collection> {
