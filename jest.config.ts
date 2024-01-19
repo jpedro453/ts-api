@@ -22,7 +22,7 @@ const config: Config = {
     collectCoverage: true,
 
     // An array of glob patterns indicating a set of files for which coverage information should be collected
-    collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
+    collectCoverageFrom: ['<rootDir>/src/**/*.ts', '!<rootDir>/src/main/**'],
 
     // The directory where Jest should output its coverage files
     coverageDirectory: 'coverage',
@@ -174,8 +174,8 @@ const config: Config = {
 
     // A map from regular expressions to paths to transformers
     transform: {
-        '.+\\.ts$': 'ts-jest',
-    },
+        '.+\\.ts$': 'ts-jest'
+    }
 
     // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
     // transformIgnorePatterns: [
