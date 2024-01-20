@@ -1,12 +1,7 @@
 import { SignUpController } from './signup'
 import { MissingParamError, InvalidParamError, ServerError } from '../../errors'
-import {
-    IEmailValidator,
-    IAddAccountModel,
-    IAddAccount,
-    IAccountModel,
-} from './signup-protocols'
-
+import { IEmailValidator, IAddAccountModel, IAddAccount, IAccountModel } from './signup-protocols'
+import { serverError } from '../../helpers/http-helper'
 interface ISutTypes {
     sut: SignUpController
     emailValidatorStub: IEmailValidator
@@ -28,7 +23,7 @@ const makeAddAccount = (): IAddAccount => {
                 id: 'valid_id',
                 name: 'valid_name',
                 email: 'valid_email@mail.com',
-                password: 'valid_password',
+                password: 'valid_password'
             }
             return new Promise((resolve) => resolve(fakeAccount))
         }
@@ -44,7 +39,7 @@ const makeSut = (): ISutTypes => {
     return {
         sut,
         emailValidatorStub,
-        addAccountStub,
+        addAccountStub
     }
 }
 
@@ -55,8 +50,8 @@ describe('SignUp Controller', () => {
             body: {
                 email: 'any_email@mail.com',
                 password: 'pwd',
-                password_confirmation: 'pwd',
-            },
+                password_confirmation: 'pwd'
+            }
         }
 
         const httpResponse = await sut.handle(httpRequest)
@@ -71,8 +66,8 @@ describe('SignUp Controller', () => {
             body: {
                 name: 'name',
                 password: 'pwd',
-                password_confirmation: 'pwd',
-            },
+                password_confirmation: 'pwd'
+            }
         }
 
         const httpResponse = await sut.handle(httpRequest)
@@ -86,8 +81,8 @@ describe('SignUp Controller', () => {
             body: {
                 name: 'name',
                 email: 'any_email@mail.com',
-                password_confirmation: 'pwd',
-            },
+                password_confirmation: 'pwd'
+            }
         }
         const httpResponse = await sut.handle(httpRequest)
 
@@ -101,15 +96,13 @@ describe('SignUp Controller', () => {
                 name: 'name',
                 email: 'any_email@mail.com',
                 password: 'pwd',
-                password_confirmation: 'pwd_invalid',
-            },
+                password_confirmation: 'pwd_invalid'
+            }
         }
         const httpResponse = await sut.handle(httpRequest)
 
         expect(httpResponse.statusCode).toBe(400)
-        expect(httpResponse.body).toEqual(
-            new InvalidParamError('password_confirmation')
-        )
+        expect(httpResponse.body).toEqual(new InvalidParamError('password_confirmation'))
     })
     test('Should return 400 if an invalid email is provided', async () => {
         const { sut, emailValidatorStub } = makeSut()
@@ -121,8 +114,8 @@ describe('SignUp Controller', () => {
                 name: 'name',
                 email: 'any_email@mail.com',
                 password: 'pwd',
-                password_confirmation: 'pwd',
-            },
+                password_confirmation: 'pwd'
+            }
         }
         const httpResponse = await sut.handle(httpRequest)
 
@@ -139,8 +132,8 @@ describe('SignUp Controller', () => {
                 name: 'name',
                 email: 'any_email@mail.com',
                 password: 'pwd',
-                password_confirmation: 'pwd',
-            },
+                password_confirmation: 'pwd'
+            }
         }
         await sut.handle(httpRequest)
 
@@ -158,13 +151,13 @@ describe('SignUp Controller', () => {
                 name: 'name',
                 email: 'any_email@mail.com',
                 password: 'pwd',
-                password_confirmation: 'pwd',
-            },
+                password_confirmation: 'pwd'
+            }
         }
         const httpResponse = await sut.handle(httpRequest)
 
         expect(httpResponse.statusCode).toBe(500)
-        expect(httpResponse.body).toEqual(new ServerError())
+        expect(httpResponse).toEqual(serverError(new Error()))
     })
     test('Should call AddAccount with correct values', async () => {
         const { sut, addAccountStub } = makeSut()
@@ -176,8 +169,8 @@ describe('SignUp Controller', () => {
                 name: 'name',
                 email: 'any_email@mail.com',
                 password: 'pwd',
-                password_confirmation: 'pwd',
-            },
+                password_confirmation: 'pwd'
+            }
         }
 
         await sut.handle(httpRequest)
@@ -185,7 +178,7 @@ describe('SignUp Controller', () => {
         expect(addSpy).toHaveBeenCalledWith({
             name: 'name',
             email: 'any_email@mail.com',
-            password: 'pwd',
+            password: 'pwd'
         })
     })
     test('Should return 500 if AddAccount throws', async () => {
@@ -200,13 +193,13 @@ describe('SignUp Controller', () => {
                 name: 'name',
                 email: 'any_email@mail.com',
                 password: 'pwd',
-                password_confirmation: 'pwd',
-            },
+                password_confirmation: 'pwd'
+            }
         }
         const httpResponse = await sut.handle(httpRequest)
 
         expect(httpResponse.statusCode).toBe(500)
-        expect(httpResponse.body).toEqual(new ServerError())
+        expect(httpResponse).toEqual(serverError(new Error()))
     })
     test('Should return 200 if AddAccount succeeds', async () => {
         const { sut } = makeSut()
@@ -216,8 +209,8 @@ describe('SignUp Controller', () => {
                 name: 'valid_name',
                 email: 'valid_email@mail.com',
                 password: 'valid_pwd',
-                password_confirmation: 'valid_pwd',
-            },
+                password_confirmation: 'valid_pwd'
+            }
         }
         const httpResponse = await sut.handle(httpRequest)
 
@@ -226,7 +219,7 @@ describe('SignUp Controller', () => {
             id: 'valid_id',
             name: 'valid_name',
             email: 'valid_email@mail.com',
-            password: 'valid_password',
+            password: 'valid_password'
         })
     })
 })
