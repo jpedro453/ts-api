@@ -2,6 +2,7 @@ import { LoginController } from './login'
 import { badRequest, serverError } from '../../helpers/http-helper'
 import { InvalidParamError, MissingParamError } from '../../errors'
 import { IEmailValidator, IHttpRequest } from '../signUp/signup-protocols'
+import { IAuthentication } from '../../../domain/useCases/authentication'
 
 const makeEmailValidator = (): IEmailValidator => {
     class EmailValidatorStub implements IEmailValidator {
@@ -10,6 +11,15 @@ const makeEmailValidator = (): IEmailValidator => {
         }
     }
     return new EmailValidatorStub()
+}
+
+const makeAuthentication = (): IAuthentication => {
+    class AuthenticationStub implements IAuthentication {
+        async auth(email: string, password: string): Promise<string> {
+            return 'any_token'
+        }
+    }
+    return new AuthenticationStub()
 }
 
 const makeFaqueRequest = (): IHttpRequest => ({
@@ -22,12 +32,14 @@ const makeFaqueRequest = (): IHttpRequest => ({
 interface ISutTypes {
     sut: LoginController
     emailValidatorStub: IEmailValidator
+    authenticationStub: IAuthentication
 }
 
 const makeSut = (): ISutTypes => {
     const emailValidatorStub = makeEmailValidator()
-    const sut = new LoginController(emailValidatorStub)
-    return { sut, emailValidatorStub }
+    const authenticationStub = makeAuthentication()
+    const sut = new LoginController(emailValidatorStub, authenticationStub)
+    return { sut, emailValidatorStub, authenticationStub }
 }
 
 describe('Login Controller', () => {
@@ -85,5 +97,15 @@ describe('Login Controller', () => {
         const httpResponse = await sut.handle(makeFaqueRequest())
 
         expect(httpResponse).toEqual(serverError(new Error()))
+    })
+
+    test('Should call authentication with correct values', async () => {
+        const { sut, authenticationStub } = makeSut()
+
+        const authSpy = jest.spyOn(authenticationStub, 'auth')
+
+        const httpResponse = await sut.handle(makeFaqueRequest())
+
+        expect(authSpy).toHaveBeenCalledWith('any_email@email.com', 'any_password')
     })
 })
