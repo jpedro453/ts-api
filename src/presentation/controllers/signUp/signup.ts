@@ -1,19 +1,22 @@
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
-import { IController, IHttpRequest, IHttpResponse, IEmailValidator, IAddAccount } from './signup-protocols'
+import { IController, IHttpRequest, IHttpResponse, IEmailValidator, IAddAccount, IValidation } from './signup-protocols'
 
 import { ServerError, InvalidParamError, MissingParamError } from '../../errors'
 
 export class SignUpController implements IController {
     private readonly emailValidator: IEmailValidator
     private readonly addAccount: IAddAccount
+    private readonly validation: IValidation
 
-    constructor(emailValidator: IEmailValidator, addAccount: IAddAccount) {
+    constructor(emailValidator: IEmailValidator, addAccount: IAddAccount, validation: IValidation) {
         this.emailValidator = emailValidator
         this.addAccount = addAccount
+        this.validation = validation
     }
 
     async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
         try {
+            this.validation.validate(httpRequest.body)
             const requiredFields = ['name', 'email', 'password', 'password_confirmation']
 
             for (const field of requiredFields) {
