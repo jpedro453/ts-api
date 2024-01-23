@@ -4,12 +4,10 @@ import { IController, IHttpRequest, IHttpResponse, IEmailValidator, IAddAccount,
 import { ServerError, InvalidParamError, MissingParamError } from '../../errors'
 
 export class SignUpController implements IController {
-    private readonly emailValidator: IEmailValidator
     private readonly addAccount: IAddAccount
     private readonly validation: IValidation
 
-    constructor(emailValidator: IEmailValidator, addAccount: IAddAccount, validation: IValidation) {
-        this.emailValidator = emailValidator
+    constructor(addAccount: IAddAccount, validation: IValidation) {
         this.addAccount = addAccount
         this.validation = validation
     }
@@ -22,10 +20,6 @@ export class SignUpController implements IController {
                 return badRequest(error)
             }
             const { name, email, password } = httpRequest.body
-
-            if (!this.emailValidator.isValid(httpRequest.body.email)) {
-                return badRequest(new InvalidParamError('email'))
-            }
 
             const account = await this.addAccount.add({
                 name,
