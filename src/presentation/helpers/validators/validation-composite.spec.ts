@@ -4,7 +4,7 @@ import { IValidation } from './validator'
 
 interface ISutTypes {
     sut: ValidationComposite
-    validationStub: IValidation
+    validationStubs: IValidation[]
 }
 
 const makeValidation = (): IValidation => {
@@ -17,16 +17,17 @@ const makeValidation = (): IValidation => {
 }
 
 const makeSut = (): ISutTypes => {
-    const validationStub = makeValidation()
-    const sut = new ValidationComposite([validationStub])
-    return { sut, validationStub }
+    const validationStubs = [makeValidation(), makeValidation()]
+    const sut = new ValidationComposite(validationStubs)
+    return { sut, validationStubs }
 }
 
 describe('Validation Composite', () => {
-    test('Should return an error if any validations fails', () => {
-        const { sut, validationStub } = makeSut()
-        jest.spyOn(validationStub, 'validate').mockReturnValue(new MissingParamError('field'))
+    test('Should return the first error if more than one validation fails', () => {
+        const { sut, validationStubs } = makeSut()
+        jest.spyOn(validationStubs[0], 'validate').mockReturnValue(new Error())
+        jest.spyOn(validationStubs[1], 'validate').mockReturnValue(new MissingParamError('field'))
         const error = sut.validate({ field: 'any_value' })
-        expect(error).toEqual(new MissingParamError('field'))
+        expect(error).toEqual(new Error())
     })
 })
