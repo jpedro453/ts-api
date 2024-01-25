@@ -1,6 +1,6 @@
 import { ILogErrorRepository } from '../../data/protocols/log-error-repository '
 import { IAccountModel } from '../../domain/models/account'
-import { serverError, ok } from '../../presentation/helpers/http-helper'
+import { serverError, ok } from '../../presentation/helpers/http/http-helper'
 import { IController, IHttpRequest, IHttpResponse } from '../../presentation/protocols'
 import { LogControllerDecorator } from './log'
 
