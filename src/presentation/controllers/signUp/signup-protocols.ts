@@ -1,5 +1,5 @@
 export * from '../../protocols'
-export * from '../../helpers/validators/validator'
+export * from '../../protocols/validator'
 export * from '../../protocols/email-validator'
 export * from '../../../domain/useCases/add-account'
 export * from '../../../domain/models/account'
