@@ -2,20 +2,24 @@ import { ILoadAccountByEmailRepository } from '../../protocols/db/load-account-b
 import { IAuthentication, IAuthenticationModel } from '../../../domain/useCases/authentication'
 import { IHashComparer } from '../../protocols/cryptography/hash-comparer'
 import { ITokenGenerator } from '../../protocols/cryptography/token-generator'
+import { IUpdateAccessTokenRepository } from '../../protocols/db/update-acess-token-repository'
 
 export class DbAuthentication implements IAuthentication {
     private readonly loadAccountByEmailRepository: ILoadAccountByEmailRepository
     private readonly hashComparer: IHashComparer
     private readonly tokenGenerator: ITokenGenerator
+    private readonly updateAccessTokenRepository: IUpdateAccessTokenRepository
 
     constructor(
         loadAccountByEmailRepository: ILoadAccountByEmailRepository,
         hashComparer: IHashComparer,
-        tokenGenerator: ITokenGenerator
+        tokenGenerator: ITokenGenerator,
+        updateAccessTokenRepository: IUpdateAccessTokenRepository
     ) {
         this.loadAccountByEmailRepository = loadAccountByEmailRepository
         this.hashComparer = hashComparer
         this.tokenGenerator = tokenGenerator
+        this.updateAccessTokenRepository = updateAccessTokenRepository
     }
 
     async auth(authentication: IAuthenticationModel): Promise<string> {
@@ -26,6 +30,7 @@ export class DbAuthentication implements IAuthentication {
 
             if (isValid) {
                 const accessToken = await this.tokenGenerator.generate(account.id)
+                await this.updateAccessTokenRepository.update(account.id, accessToken)
                 return accessToken
             }
         }
