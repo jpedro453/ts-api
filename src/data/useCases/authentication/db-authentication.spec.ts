@@ -39,7 +39,7 @@ const makeHashComparer = (): IHashComparer => {
 
 const makeEncrypter = (): IEncrypter => {
     class EncrypterStub implements IEncrypter {
-        async encrypt(id: string): Promise<string> {
+        async encrypt(value: string): Promise<string> {
             return new Promise((resolve) => resolve('any_token'))
         }
     }
