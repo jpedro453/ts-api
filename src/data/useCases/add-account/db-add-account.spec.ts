@@ -3,23 +3,23 @@ import {
     IAccountModel,
     IAddAccount,
     IAddAccountModel,
-    IEncrypter,
-    IAddAccountRepository,
+    IHasher,
+    IAddAccountRepository
 } from './db-add-account-protocols'
 
 interface ISutTypes {
-    encrypterStub: IEncrypter
+    hasherStub: IHasher
     sut: DbAddAccount
     addAccountRepositoryStub: IAddAccountRepository
 }
 
-const makeEncrypter = (): IEncrypter => {
-    class EncrypterStub {
-        async encrypt(value: string): Promise<string> {
+const makeHasher = (): IHasher => {
+    class HasherStub {
+        async hash(value: string): Promise<string> {
             return new Promise((resolve) => resolve('hashed_pwd'))
         }
     }
-    return new EncrypterStub()
+    return new HasherStub()
 }
 
 const makeAddAccountRepository = (): IAddAccountRepository => {
@@ -29,7 +29,7 @@ const makeAddAccountRepository = (): IAddAccountRepository => {
                 id: 'valid_id',
                 name: 'valid_name',
                 email: 'valid_email',
-                password: 'hashed_pwd',
+                password: 'hashed_pwd'
             }
             return new Promise((resolve) => resolve(fakeAccount))
         }
@@ -38,43 +38,41 @@ const makeAddAccountRepository = (): IAddAccountRepository => {
 }
 
 const makeSut = (): ISutTypes => {
-    const encrypterStub = makeEncrypter()
+    const hasherStub = makeHasher()
     const addAccountRepositoryStub = makeAddAccountRepository()
-    const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub)
+    const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub)
 
     return {
         sut,
-        encrypterStub,
-        addAccountRepositoryStub,
+        hasherStub,
+        addAccountRepositoryStub
     }
 }
 
 describe('DbAddAccount useCase', () => {
-    test('Should call encrypter with correct password', async () => {
-        const { sut, encrypterStub } = makeSut()
+    test('Should call hasher with correct password', async () => {
+        const { sut, hasherStub } = makeSut()
 
-        const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
+        const hashSpy = jest.spyOn(hasherStub, 'hash')
 
         const accountData = {
             name: 'valid_name',
             email: 'valid_email',
-            password: 'valid_password',
+            password: 'valid_password'
         }
 
         await sut.add(accountData)
-        expect(encryptSpy).toHaveBeenCalledWith('valid_password')
+        expect(hashSpy).toHaveBeenCalledWith('valid_password')
     })
-    test('Should throw if encrypter throws', async () => {
-        const { sut, encrypterStub } = makeSut()
+    test('Should throw if hasher throws', async () => {
+        const { sut, hasherStub } = makeSut()
 
-        jest.spyOn(encrypterStub, 'encrypt').mockReturnValueOnce(
-            new Promise((resolve, reject) => reject(new Error()))
-        )
+        jest.spyOn(hasherStub, 'hash').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
 
         const accountData = {
             name: 'valid_name',
             email: 'valid_email',
-            password: 'valid_password',
+            password: 'valid_password'
         }
 
         const promise = sut.add(accountData)
@@ -88,17 +86,17 @@ describe('DbAddAccount useCase', () => {
         const accountData = {
             name: 'valid_name',
             email: 'valid_email',
-            password: 'valid_password',
+            password: 'valid_password'
         }
 
         await sut.add(accountData)
         expect(addSpy).toHaveBeenCalledWith({
             name: 'valid_name',
             email: 'valid_email',
-            password: 'hashed_pwd',
+            password: 'hashed_pwd'
         })
     })
-    test('Should throw if encrypter throws', async () => {
+    test('Should throw if hasher throws', async () => {
         const { sut, addAccountRepositoryStub } = makeSut()
 
         jest.spyOn(addAccountRepositoryStub, 'add').mockReturnValueOnce(
@@ -108,7 +106,7 @@ describe('DbAddAccount useCase', () => {
         const accountData = {
             name: 'valid_name',
             email: 'valid_email',
-            password: 'invalid_password',
+            password: 'invalid_password'
         }
 
         const promise = sut.add(accountData)
@@ -120,7 +118,7 @@ describe('DbAddAccount useCase', () => {
         const accountData = {
             name: 'valid_name',
             email: 'valid_email',
-            password: 'valid_password',
+            password: 'valid_password'
         }
 
         const account = await sut.add(accountData)
@@ -128,7 +126,7 @@ describe('DbAddAccount useCase', () => {
             id: 'valid_id',
             name: 'valid_name',
             email: 'valid_email',
-            password: 'hashed_pwd',
+            password: 'hashed_pwd'
         })
     })
 })
