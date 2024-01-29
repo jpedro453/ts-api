@@ -14,7 +14,7 @@
         "test:clg": "npm test -- --watch --silent=false -c jest-unit-config.ts"
     },
     "keywords": [],
-    "author": "",
+    "author": "João Pedro",
     "license": "ISC",
     "devDependencies": {
         "@types/bcrypt": "^5.0.2",
