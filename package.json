@@ -10,7 +10,8 @@
         "test:integration": "npm test -- --watch -c jest-integration-config.ts",
         "test:unit": "npm test -- --watch -c jest-unit-config.ts",
         "test:staged": "jest --passWithNoTests",
-        "test:ci": "npm test -- --coverage"
+        "test:ci": "npm test -- --coverage",
+        "test:clg": "npm test -- --watch --silent=false -c jest-unit-config.ts"
     },
     "keywords": [],
     "author": "",
