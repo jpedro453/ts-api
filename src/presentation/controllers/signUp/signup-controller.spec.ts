@@ -1,4 +1,4 @@
-import { SignUpController } from './signup'
+import { SignUpController } from './signup-controller'
 import { MissingParamError, InvalidParamError, ServerError } from '../../errors'
 import {
     IEmailValidator,
@@ -7,7 +7,7 @@ import {
     IAccountModel,
     IHttpRequest,
     IValidation
-} from './signup-protocols'
+} from './signup-controller-protocols'
 import { ok, serverError, badRequest } from '../../helpers/http/http-helper'
 
 interface ISutTypes {

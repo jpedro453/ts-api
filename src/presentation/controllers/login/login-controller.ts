@@ -1,4 +1,4 @@
-import { IController, IHttpRequest, IHttpResponse, IAuthentication } from './login-protocols'
+import { IController, IHttpRequest, IHttpResponse, IAuthentication } from './login-controller-protocols'
 import { badRequest, ok, serverError, unauthorized } from '../../helpers/http/http-helper'
 import { IValidation } from '../../protocols/validator'
 
