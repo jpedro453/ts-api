@@ -11,8 +11,8 @@ services:
   api:
     container_name: api-container
     build: .
-    restart: always
     image: clean-ts-api
+    restart: always
     command: npm start
     volumes:
       - ./dist:/usr/src/clean-ts-api
