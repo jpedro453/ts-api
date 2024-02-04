@@ -9,11 +9,22 @@ import {
     IValidation
 } from './signup-controller-protocols'
 import { ok, serverError, badRequest } from '../../helpers/http/http-helper'
+import { IAuthentication, IAuthenticationModel } from '../../../domain/useCases/authentication'
 
 interface ISutTypes {
     sut: SignUpController
     addAccountStub: IAddAccount
+    authenticationStub: IAuthentication
     validationStub: IValidation
+}
+
+const makeAuthentication = (): IAuthentication => {
+    class AuthenticationStub implements IAuthentication {
+        async auth(authentication: IAuthenticationModel): Promise<string> {
+            return 'any_token'
+        }
+    }
+    return new AuthenticationStub()
 }
 
 const makeAddAccount = (): IAddAccount => {
@@ -52,12 +63,14 @@ const makeFakeRequest = (): IHttpRequest => ({
 const makeSut = (): ISutTypes => {
     const validationStub = makeValidation()
     const addAccountStub = makeAddAccount()
-    const sut = new SignUpController(addAccountStub, validationStub)
+    const authenticationStub = makeAuthentication()
+    const sut = new SignUpController(addAccountStub, validationStub, authenticationStub)
 
     return {
         sut,
         addAccountStub,
-        validationStub
+        validationStub,
+        authenticationStub
     }
 }
 
@@ -121,5 +134,14 @@ describe('SignUp Controller', () => {
         const httpResponse = await sut.handle(makeFakeRequest())
 
         expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')))
+    })
+    test('Should call authentication with correct values', async () => {
+        const { sut, authenticationStub } = makeSut()
+
+        const authSpy = jest.spyOn(authenticationStub, 'auth')
+
+        const httpResponse = await sut.handle(makeFakeRequest())
+
+        expect(authSpy).toHaveBeenCalledWith({ email: 'any_email@mail.com', password: 'pwd' })
     })
 })
