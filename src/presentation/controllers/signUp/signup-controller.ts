@@ -9,14 +9,17 @@ import {
 } from './signup-controller-protocols'
 
 import { ServerError, InvalidParamError, MissingParamError } from '../../errors'
+import { IAuthentication } from '../login/login-controller-protocols'
 
 export class SignUpController implements IController {
     private readonly addAccount: IAddAccount
     private readonly validation: IValidation
+    private readonly authentication: IAuthentication
 
-    constructor(addAccount: IAddAccount, validation: IValidation) {
+    constructor(addAccount: IAddAccount, validation: IValidation, authentication: IAuthentication) {
         this.addAccount = addAccount
         this.validation = validation
+        this.authentication = authentication
     }
 
     async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -33,6 +36,7 @@ export class SignUpController implements IController {
                 email,
                 password
             })
+            await this.authentication.auth({ email, password })
 
             return ok(account)
         } catch (error) {
