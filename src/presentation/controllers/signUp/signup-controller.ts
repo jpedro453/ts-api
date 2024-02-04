@@ -1,4 +1,4 @@
-import { badRequest, ok, serverError } from '../../helpers/http/http-helper'
+import { badRequest, forbidden, ok, serverError } from '../../helpers/http/http-helper'
 import {
     IController,
     IHttpRequest,
@@ -8,7 +8,7 @@ import {
     IValidation
 } from './signup-controller-protocols'
 
-import { ServerError, InvalidParamError, MissingParamError } from '../../errors'
+import { ServerError, InvalidParamError, MissingParamError, EmailInUseError } from '../../errors'
 import { IAuthentication } from '../login/login-controller-protocols'
 
 export class SignUpController implements IController {
@@ -36,6 +36,9 @@ export class SignUpController implements IController {
                 email,
                 password
             })
+            if (!account) {
+                return forbidden(new EmailInUseError())
+            }
             const accessToken = await this.authentication.auth({ email, password })
 
             return ok({ accessToken })
