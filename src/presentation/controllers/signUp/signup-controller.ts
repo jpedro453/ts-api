@@ -33,7 +33,6 @@ export class SignUpController implements IController {
                 email,
                 password
             })
-            account.name = 'TESTE'
 
             return ok(account)
         } catch (error) {
