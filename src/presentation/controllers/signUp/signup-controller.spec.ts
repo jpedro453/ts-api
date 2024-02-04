@@ -27,7 +27,7 @@ const makeAddAccount = (): IAddAccount => {
 const makeValidation = (): IValidation => {
     class ValidationStub implements IValidation {
         validate(input: any): Error {
-            return null
+            return null as any
         }
     }
     return new ValidationStub()
@@ -93,7 +93,7 @@ describe('SignUp Controller', () => {
         const httpResponse = await sut.handle(httpRequest)
 
         expect(httpResponse.statusCode).toBe(500)
-        expect(httpResponse).toEqual(serverError(new ServerError(null)))
+        expect(httpResponse).toEqual(serverError(new ServerError(null as any)))
     })
 
     test('Should return 200 if AddAccount succeeds', async () => {

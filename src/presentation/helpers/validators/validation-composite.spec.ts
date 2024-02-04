@@ -10,7 +10,7 @@ interface ISutTypes {
 const makeValidation = (): IValidation => {
     class ValidationStub implements IValidation {
         validate(input: any): Error {
-            return null
+            return null as any
         }
     }
     return new ValidationStub()
