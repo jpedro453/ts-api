@@ -135,6 +135,7 @@ describe('SignUp Controller', () => {
 
         expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')))
     })
+
     test('Should call authentication with correct values', async () => {
         const { sut, authenticationStub } = makeSut()
 
@@ -143,5 +144,17 @@ describe('SignUp Controller', () => {
         const httpResponse = await sut.handle(makeFakeRequest())
 
         expect(authSpy).toHaveBeenCalledWith({ email: 'any_email@mail.com', password: 'pwd' })
+    })
+
+    test('Should return 500 if authentication throws', async () => {
+        const { sut, authenticationStub } = makeSut()
+
+        jest.spyOn(authenticationStub, 'auth').mockReturnValueOnce(
+            new Promise((resolve, reject) => reject(new Error()))
+        )
+
+        const httpResponse = await sut.handle(makeFakeRequest())
+
+        expect(httpResponse).toEqual(serverError(new Error()))
     })
 })
