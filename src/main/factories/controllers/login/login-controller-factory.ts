@@ -1,5 +1,5 @@
 import { LogMongoRepository } from '../../../../infra/db/mongodb/log/log-mongo-repository'
-import { LoginController } from '../../../../presentation/controllers/login/login-controller'
+import { LoginController } from '../../../../presentation/controllers/auth/login/login-controller'
 import { IController } from '../../../../presentation/protocols'
 import { LogControllerDecorator } from '../../../decorators/log-controller-decorator'
 import { makeLogControllerDecorator } from '../../decorators/log-controller-decorator-factory'
