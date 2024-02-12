@@ -34,7 +34,7 @@ const makeHasher = (): IHasher => {
 const makeLoadAccountByEmailRepository = (): ILoadAccountByEmailRepository => {
     class LoadAccountByEmailRepositoryStub implements ILoadAccountByEmailRepository {
         async loadByEmail(email: string): Promise<IAccountModel> {
-            return new Promise((resolve) => resolve(makeFakeAccountData()))
+            return new Promise((resolve) => resolve(null as any))
         }
     }
     return new LoadAccountByEmailRepositoryStub()
@@ -149,6 +149,16 @@ describe('DbAddAccount useCase', () => {
             password: 'hashed_pwd'
         })
     })
+
+    test('Should return null if LoadAccountByEmailRepository returns null', async () => {
+        const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+        jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(
+            new Promise((resolve) => resolve(makeFakeAccountData()))
+        )
+        const account = await sut.add(makeFakeAccountData())
+        expect(account).toBeNull()
+    })
+
     test('Should call LoadAccountByEmailRepository with correct email', async () => {
         const { sut, loadAccountByEmailRepositoryStub } = makeSut()
         const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
