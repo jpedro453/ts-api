@@ -41,7 +41,7 @@ describe('DbAddSurvey Use Case', () => {
         expect(addSpy).toHaveBeenCalledWith(surveyData)
     })
 
-    test('Should throw if hasher throws', async () => {
+    test('Should throw if AddSurveyRepository throws', async () => {
         const { sut, addSurveyRepositoryStub } = makeSut()
 
         jest.spyOn(addSurveyRepositoryStub, 'add').mockReturnValueOnce(
