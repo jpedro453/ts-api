@@ -1,10 +1,14 @@
+import { badRequest } from '../../../helpers/http/http-helper'
 import { IController, IHttpRequest, IHttpResponse, IValidation } from './add-survey-controller-protocols'
 
 export class AddSurveyController implements IController {
     constructor(private readonly validation: IValidation) {}
 
-    handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-        this.validation.validate(httpRequest.body)
+    async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
+        const error = this.validation.validate(httpRequest.body)
+        if (error) {
+            return badRequest(error)
+        }
         return new Promise((resolve) => resolve(null))
     }
 }
