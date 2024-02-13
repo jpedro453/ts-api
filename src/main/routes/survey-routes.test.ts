@@ -18,7 +18,7 @@ describe('Survey routes', () => {
         await surveyCollection.deleteMany({})
     })
     describe('POST /surveys', () => {
-        test('Should return 204 on survey success', async () => {
+        test('Should return 403 on add survey without acessToken', async () => {
             await request(app)
                 .post('/api/surveys')
                 .send({
@@ -33,7 +33,7 @@ describe('Survey routes', () => {
                         }
                     ]
                 })
-                .expect(204)
+                .expect(403)
         })
     })
 })
