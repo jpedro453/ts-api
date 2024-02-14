@@ -6,7 +6,7 @@ export class DbLoadSurveys implements ILoadSurveys {
     constructor(private readonly loadSurveysRepository: ILoadSurveysRepository) {}
 
     async load(): Promise<ISurveyModel[]> {
-        await this.loadSurveysRepository.loadAll()
-        return []
+        const surveys = await this.loadSurveysRepository.loadAll()
+        return surveys.length ? surveys : []
     }
 }
