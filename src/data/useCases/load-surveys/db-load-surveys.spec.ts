@@ -43,4 +43,10 @@ describe('LoadSurveys UseCase', () => {
         await sut.load()
         expect(loadSpy).toHaveBeenCalled()
     })
+
+    test('Should return a list of Surveys on LoadSurveysRepository success', async () => {
+        const { sut } = makeSut()
+        const surveys = await sut.load()
+        expect(surveys).toEqual(makeFakeSurveys())
+    })
 })
