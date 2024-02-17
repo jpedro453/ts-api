@@ -8,7 +8,9 @@ export class SurveyMongoRepository implements IAddSurveyRepository, ILoadSurveys
         const surveyCollection = await MongoHelper.getCollection('surveys')
         const result = await surveyCollection.insertOne(surveyData)
     }
-    loadAll(): Promise<ISurveyModel[]> {
-        throw new Error('Method not implemented.')
+    async loadAll(): Promise<ISurveyModel[]> {
+        const surveyCollection = await MongoHelper.getCollection('surveys')
+        const surveys = await surveyCollection.find().toArray()
+        return MongoHelper.mapArray(surveys)
     }
 }
