@@ -40,6 +40,35 @@ describe('Survey routes', () => {
                 })
                 .expect(403)
         })
+        test('Should return 204 on add survey if valid accessToken', async () => {
+            const res = await accountCollection.insertOne({
+                name: 'Joao',
+                email: 'joao@gmail.com',
+                password: '123',
+                role: 'admin'
+            })
+            const accountId = await MongoHelper.getCollectionItemById('accounts', res.insertedId)
+            const id = accountId._id
+            const accessToken = sign({ id }, env.jwtSecret)
+            await accountCollection.updateOne({ _id: id }, { $set: { accessToken } })
+
+            await request(app)
+                .post('/api/surveys')
+                .set('x-access-token', accessToken)
+                .send({
+                    question: 'Question',
+                    answers: [
+                        {
+                            image: 'http://image-name.com',
+                            answer: 'Answer 1'
+                        },
+                        {
+                            answer: 'Answer 2'
+                        }
+                    ]
+                })
+                .expect(204)
+        })
     })
 
     describe('GET /surveys', () => {
