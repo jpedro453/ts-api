@@ -40,40 +40,41 @@ describe('Survey routes', () => {
                 })
                 .expect(403)
         })
-        test('Should return 204 on add survey if valid accessToken', async () => {
+    })
+
+    describe('GET /surveys', () => {
+        test('Should return 403 on load survey without accessToken', async () => {
+            await request(app).get('/api/surveys').expect(403)
+        })
+
+        test('Should return 200 on load surveys if valid accessToken', async () => {
             const res = await accountCollection.insertOne({
                 name: 'Joao',
                 email: 'joao@gmail.com',
-                password: '123',
-                role: 'admin'
+                password: '123'
             })
             const accountId = await MongoHelper.getCollectionItemById('accounts', res.insertedId)
             const id = accountId._id
             const accessToken = sign({ id }, env.jwtSecret)
             await accountCollection.updateOne({ _id: id }, { $set: { accessToken } })
 
-            await request(app)
-                .post('/api/surveys')
-                .set('x-access-token', accessToken)
-                .send({
-                    question: 'Question',
+            await surveyCollection.insertMany([
+                {
+                    question: 'any_question',
                     answers: [
                         {
-                            image: 'http://image-name.com',
-                            answer: 'Answer 1'
+                            image: 'any_image',
+                            answer: 'any_answer'
                         },
                         {
-                            answer: 'Answer 2'
+                            answer: 'other_answer'
                         }
-                    ]
-                })
-                .expect(204)
-        })
-    })
+                    ],
+                    date: new Date()
+                }
+            ])
 
-    describe('GET /surveys', () => {
-        test('Should return 403 on load survey without accessToken', async () => {
-            await request(app).get('/api/surveys').expect(403)
+            await request(app).get('/api/surveys').set('x-access-token', accessToken).expect(200)
         })
     })
 })
