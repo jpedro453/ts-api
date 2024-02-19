@@ -1,5 +1,10 @@
+import dotenv from 'dotenv'
+import path from 'path'
+const envPath = path.join(__dirname, '..', '..', '..', '.env')
+dotenv.config({ path: envPath })
+
 export default {
-    mongoUrl: 'mongodb://127.0.0.1:27017/node-api',
+    mongoUrl: process.env.MONGO_URL,
     port: 3030,
-    jwtSecret: '@#A8vB2i(@'
+    jwtSecret: process.env.JWT_SECRET
 }
