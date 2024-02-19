@@ -1,7 +1,7 @@
-import { ILoadAccountByToken } from '../../../domain/useCases/load-account-by-token'
-import { IDecrypter } from '../../protocols/cryptography/decrypter'
-import { ILoadAccountByTokenRepository } from '../../protocols/db/account/load-account-by-token-repository'
-import { IAccountModel } from '../add-account/db-add-account-protocols'
+import { ILoadAccountByToken } from '@/domain/useCases/load-account-by-token'
+import { IDecrypter } from '@/data/protocols/cryptography/decrypter'
+import { ILoadAccountByTokenRepository } from '@/data/protocols/db/account/load-account-by-token-repository'
+import { IAccountModel } from '@/data/useCases/add-account/db-add-account-protocols'
 
 export class DbLoadAccountByToken implements ILoadAccountByToken {
     constructor(

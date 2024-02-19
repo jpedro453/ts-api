@@ -1,4 +1,4 @@
-import { IController, IHttpRequest, IHttpResponse } from '../../../presentation/protocols'
+import { IController, IHttpRequest, IHttpResponse } from '@/presentation/protocols'
 import { Request, Response } from 'express'
 
 export const adaptRoute = (controller: IController) => {

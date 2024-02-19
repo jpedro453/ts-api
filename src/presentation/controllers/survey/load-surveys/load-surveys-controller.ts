@@ -1,5 +1,4 @@
-import { isEmpty } from 'validator'
-import { noContent, ok, serverError } from '../../../helpers/http/http-helper'
+import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { IController, IHttpRequest, IHttpResponse, ILoadSurveys } from './load-surveys.protocols'
 
 export class LoadSurveysController implements IController {
