@@ -1,8 +1,8 @@
 import { LoginController } from './login-controller'
-import { badRequest, ok, serverError, unauthorized } from '../../../helpers/http/http-helper'
-import { InvalidParamError, MissingParamError } from '../../../errors'
+import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers/http/http-helper'
+import { InvalidParamError, MissingParamError } from '@/presentation/errors'
 import { IHttpRequest, IAuthentication, IAuthenticationModel } from './login-controller-protocols'
-import { IValidation } from '../signUp/signup-controller-protocols'
+import { IValidation } from '@/presentation/controllers/auth/signUp/signup-controller-protocols'
 
 const makeAuthentication = (): IAuthentication => {
     class AuthenticationStub implements IAuthentication {

@@ -1,5 +1,5 @@
 import { SignUpController } from './signup-controller'
-import { MissingParamError, InvalidParamError, ServerError, EmailInUseError } from '../../../errors'
+import { MissingParamError, ServerError, EmailInUseError } from '@/presentation/errors'
 import {
     IEmailValidator,
     IAddAccountModel,
@@ -8,8 +8,8 @@ import {
     IHttpRequest,
     IValidation
 } from './signup-controller-protocols'
-import { ok, serverError, badRequest, forbidden } from '../../../helpers/http/http-helper'
-import { IAuthentication, IAuthenticationModel } from '../../../../domain/useCases/authentication'
+import { ok, serverError, badRequest, forbidden } from '@/presentation/helpers/http/http-helper'
+import { IAuthentication, IAuthenticationModel } from '@/domain/useCases/authentication'
 
 interface ISutTypes {
     sut: SignUpController

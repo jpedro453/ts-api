@@ -1,4 +1,4 @@
-import { IHttpRequest, IMiddleware } from '../../../presentation/protocols'
+import { IHttpRequest, IMiddleware } from '@/presentation/protocols'
 import { Request, Response, NextFunction } from 'express'
 
 export const adaptMiddleware = (middleware: IMiddleware) => {

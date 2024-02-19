@@ -1,10 +1,10 @@
-import { IAddAccountRepository } from '../../../../data/protocols/db/account/add-account-repository'
-import { ILoadAccountByEmailRepository } from '../../../../data/protocols/db/account/load-account-by-email-repository'
-import { ILoadAccountByTokenRepository } from '../../../../data/protocols/db/account/load-account-by-token-repository'
-import { IUpdateAccessTokenRepository } from '../../../../data/protocols/db/account/update-acess-token-repository'
-import { IAccountModel } from '../../../../domain/models/account'
-import { IAddAccountModel } from '../../../../domain/useCases/add-account'
-import { MongoHelper } from '../helpers/mongo-helper'
+import { IAddAccountRepository } from '@/data/protocols/db/account/add-account-repository'
+import { ILoadAccountByEmailRepository } from '@/data/protocols/db/account/load-account-by-email-repository'
+import { ILoadAccountByTokenRepository } from '@/data/protocols/db/account/load-account-by-token-repository'
+import { IUpdateAccessTokenRepository } from '@/data/protocols/db/account/update-acess-token-repository'
+import { IAccountModel } from '@/domain/models/account'
+import { IAddAccountModel } from '@/domain/useCases/add-account'
+import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 
 export class AccountMongoRepository
     implements
