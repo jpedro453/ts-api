@@ -1,4 +1,4 @@
-import { ILoadAccountByToken } from '@/domain/useCases/load-account-by-token'
+import { ILoadAccountByToken } from '@/domain/useCases/account/load-account-by-token'
 import { IDecrypter } from '@/data/protocols/cryptography/decrypter'
 import { ILoadAccountByTokenRepository } from '@/data/protocols/db/account/load-account-by-token-repository'
 import { IAccountModel } from '@/data/useCases/account/add-account/db-add-account-protocols'

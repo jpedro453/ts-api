@@ -1,6 +1,6 @@
 import { ISaveSurveyResultRepository } from '@/data/protocols/db/survey/save-survey-result-repository'
 import { ISurveyResultModel } from '@/domain/models/survey-result'
-import { ISaveSurveyResult, ISaveSurveyResultModel } from '@/domain/useCases/save-survey-result'
+import { ISaveSurveyResult, ISaveSurveyResultModel } from '@/domain/useCases/survey/save-survey-result'
 
 export class DbSaveSurveyResult implements ISaveSurveyResult {
     constructor(private readonly saveSurveyResultRepository: ISaveSurveyResultRepository) {}

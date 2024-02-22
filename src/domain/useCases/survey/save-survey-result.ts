@@ -1,4 +1,4 @@
-import { ISurveyResultModel } from '../models/survey-result'
+import { ISurveyResultModel } from '../../models/survey-result'
 
 export type ISaveSurveyResultModel = Omit<ISurveyResultModel, 'id'>
 

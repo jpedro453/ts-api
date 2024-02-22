@@ -9,7 +9,7 @@ import {
     IValidation
 } from './signup-controller-protocols'
 import { ok, serverError, badRequest, forbidden } from '@/presentation/helpers/http/http-helper'
-import { IAuthentication, IAuthenticationModel } from '@/domain/useCases/authentication'
+import { IAuthentication, IAuthenticationModel } from '@/domain/useCases/account/authentication'
 
 interface ISutTypes {
     sut: SignUpController

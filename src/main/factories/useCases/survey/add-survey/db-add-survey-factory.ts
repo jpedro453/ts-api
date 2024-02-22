@@ -1,4 +1,4 @@
-import { IAddSurvey } from '@/domain/useCases/add-survey'
+import { IAddSurvey } from '@/domain/useCases/survey/add-survey'
 import { DbAddSurvey } from '@/data/useCases/survey/add-survey/db-add-survey'
 import { SurveyMongoRepository } from '@/infra/db/mongodb/survey/survey-mongo-repository'
 
