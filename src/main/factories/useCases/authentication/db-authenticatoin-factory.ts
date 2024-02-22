@@ -1,4 +1,4 @@
-import { DbAuthentication } from '@/data/useCases/authentication/db-authentication'
+import { DbAuthentication } from '@/data/useCases/account/authentication/db-authentication'
 import env from '@/main/config/env'
 import { BcryptAdapter } from '@/infra/cryptography/bcrypt-adapter/bcrypt-adapter'
 import { JwtAdapter } from '@/infra/cryptography/jwt-adapter/jwt-adapter'

@@ -1,6 +1,6 @@
 import { DbAddAccount } from './db-add-acount'
 import { IAccountModel, IAddAccountModel, IHasher, IAddAccountRepository } from './db-add-account-protocols'
-import { ILoadAccountByEmailRepository } from '@/data/useCases/authentication/db-authentication-protocols'
+import { ILoadAccountByEmailRepository } from '@/data/useCases/account/authentication/db-authentication-protocols'
 
 interface ISutTypes {
     hasherStub: IHasher

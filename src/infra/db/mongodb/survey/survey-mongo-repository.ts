@@ -1,6 +1,6 @@
 import { ILoadSurveyByIdRepository } from '@/data/protocols/db/survey/load-survey-by-id-repository'
 import { ILoadSurveysRepository } from '@/data/protocols/db/survey/load-surveys-repository'
-import { IAddSurveyModel, IAddSurveyRepository } from '@/data/useCases/add-survey/db-add-survey-protocols'
+import { IAddSurveyModel, IAddSurveyRepository } from '@/data/useCases/survey/add-survey/db-add-survey-protocols'
 import { ISurveyModel } from '@/domain/models/survey'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 

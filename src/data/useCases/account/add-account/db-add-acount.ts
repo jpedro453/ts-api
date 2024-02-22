@@ -1,4 +1,4 @@
-import { ILoadAccountByEmailRepository } from '@/data/useCases/authentication/db-authentication-protocols'
+import { ILoadAccountByEmailRepository } from '@/data/useCases/account/authentication/db-authentication-protocols'
 import {
     IAccountModel,
     IAddAccount,
