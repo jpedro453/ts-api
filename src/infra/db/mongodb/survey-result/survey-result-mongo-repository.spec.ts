@@ -82,5 +82,32 @@ describe('Survey Result Mongo Repository', () => {
             expect(surveyResult.id).toBeTruthy()
             expect(surveyResult.answer).toBe(surveyMapped.answers[0].answer)
         })
+
+        test('Should update an survey result if its not new', async () => {
+            const survey = await makeSurvey()
+            const account = await makeAccount()
+
+            const surveyMapped = MongoHelper.map(survey)
+            const accountMapped = MongoHelper.map(account)
+
+            const res = await surveyResultCollection.insertOne({
+                survey_id: surveyMapped.id,
+                account_id: accountMapped.id,
+                answer: surveyMapped.answers[0].answer,
+                date: new Date()
+            })
+
+            const sut = makeSut()
+            const surveyResult = await sut.save({
+                survey_id: surveyMapped.id,
+                account_id: accountMapped.id,
+                answer: surveyMapped.answers[1].answer,
+                date: new Date()
+            })
+            expect(surveyResult).toBeTruthy()
+            const resultID = await MongoHelper.getCollectionItemById('surveyResults', res.insertedId)
+            expect(surveyResult.id).toStrictEqual(resultID._id)
+            expect(surveyResult.answer).toBe(surveyMapped.answers[1].answer)
+        })
     })
 })
