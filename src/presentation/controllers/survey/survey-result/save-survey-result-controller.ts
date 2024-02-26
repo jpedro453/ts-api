@@ -1,8 +1,9 @@
 import { ILoadSurveyById } from '@/domain/useCases/survey/load-survey-by-id'
 import { IController, IHttpRequest, IHttpResponse } from '../add-survey/add-survey-controller-protocols'
-import { forbidden, serverError } from '@/presentation/helpers/http/http-helper'
+import { forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { InvalidParamError } from '@/presentation/errors'
 import { ISaveSurveyResult } from '@/domain/useCases/survey/save-survey-result'
+import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 
 export class SaveSurveyResultController implements IController {
     constructor(
@@ -26,12 +27,15 @@ export class SaveSurveyResultController implements IController {
             } else {
                 return forbidden(new InvalidParamError('SurveyID'))
             }
-            await this.saveSurveyResult.save({
+            const surveyResult = await this.saveSurveyResult.save({
                 survey_id,
                 account_id,
                 answer,
                 date: new Date()
             })
+            if (surveyResult) {
+                return ok(surveyResult)
+            }
 
             return null
         } catch (error) {
