@@ -3,7 +3,7 @@ import { ISurveyResultModel } from '@/domain/models/survey-result'
 import { ISaveSurveyResultModel } from '@/domain/useCases/survey/save-survey-result'
 import { MongoHelper } from '../helpers/mongo-helper'
 
-export class SurveyResultMongoRepository {
+export class SurveyResultMongoRepository implements ISaveSurveyResultRepository {
     async save(data: ISaveSurveyResultModel): Promise<ISurveyResultModel> {
         const surveyResultCollection = await MongoHelper.getCollection('surveyResults')
         const res = await surveyResultCollection.findOneAndUpdate(
