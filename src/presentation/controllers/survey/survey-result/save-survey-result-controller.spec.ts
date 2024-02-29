@@ -115,7 +115,6 @@ describe('SaveSurveyResult Controller', () => {
         const { sut, saveSurveyResultStub } = makeSut()
         const saveSpy = jest.spyOn(saveSurveyResultStub, 'save')
         const res = await sut.handle(makeFakeRequest())
-        console.log(res)
         expect(saveSpy).toHaveBeenCalledWith({
             survey_id: 'any_survey_id',
             account_id: 'any_account_id',

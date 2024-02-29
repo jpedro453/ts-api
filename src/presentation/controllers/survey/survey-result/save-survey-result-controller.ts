@@ -4,6 +4,7 @@ import { forbidden, ok, serverError } from '@/presentation/helpers/http/http-hel
 import { InvalidParamError } from '@/presentation/errors'
 import { ISaveSurveyResult } from '@/domain/useCases/survey/save-survey-result'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
+import { ObjectId } from 'mongodb'
 
 export class SaveSurveyResultController implements IController {
     constructor(
@@ -16,7 +17,7 @@ export class SaveSurveyResultController implements IController {
             const { answer } = httpRequest.body
             const { account_id } = httpRequest
 
-            const survey = await this.loadSurveyById.loadById(survey_id)
+            const survey = await this.loadSurveyById.loadById(new ObjectId(survey_id))
 
             if (survey) {
                 const answers = survey.answers.map((a) => a.answer)

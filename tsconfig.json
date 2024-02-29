@@ -6,11 +6,11 @@
         "esModuleInterop": true,
         "sourceMap": false,
         "rootDir": "src",
-        "baseUrl": "src",
+        "baseUrl": ".",
         "paths": {
-            "@/*": ["*"]
+            "@/*": ["src/*"]
         }
     },
-    "include": ["src"],
-    "exclude": []
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]
 }
