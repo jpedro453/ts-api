@@ -2,7 +2,6 @@ import { Collection } from 'mongodb'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { SurveyResultMongoRepository } from './survey-result-mongo-repository'
 import MockDate from 'mockdate'
-import { ISaveSurveyResultModel } from '@/domain/useCases/survey/save-survey-result'
 import { ISurveyModel } from '@/domain/models/survey'
 import { IAccountModel } from '@/domain/models/account'
 

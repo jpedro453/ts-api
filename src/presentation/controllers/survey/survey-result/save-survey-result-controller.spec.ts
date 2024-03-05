@@ -92,10 +92,10 @@ describe('SaveSurveyResult Controller', () => {
     test('Should return 500 if LoadSurveyById throws', async () => {
         const { sut, loadSurveyByIdStub } = makeSut()
         jest.spyOn(loadSurveyByIdStub, 'loadById').mockReturnValueOnce(
-            new Promise((resolve, reject) => reject(new Error()))
+            new Promise((resolve, reject) => reject(new Error('Mensagem do erro')))
         )
         const httpResponse = await sut.handle(makeFakeRequest())
-        expect(httpResponse).toEqual(serverError(new Error()))
+        expect(httpResponse).toEqual(serverError(new Error('Mensagem do erro')))
     })
 
     test('Should return 403 if and invalid answer is provided', async () => {
@@ -126,10 +126,10 @@ describe('SaveSurveyResult Controller', () => {
     test('Should return 500 if SaveSurveyResult throws', async () => {
         const { sut, saveSurveyResultStub } = makeSut()
         jest.spyOn(saveSurveyResultStub, 'save').mockReturnValueOnce(
-            new Promise((resolve, reject) => reject(new Error()))
+            new Promise((resolve, reject) => reject(new Error('Mensagem do erro')))
         )
         const httpResponse = await sut.handle(makeFakeRequest())
-        expect(httpResponse).toEqual(serverError(new Error()))
+        expect(httpResponse).toEqual(serverError(new Error('Mensagem do erro')))
     })
 
     test('Should return 200 on success', async () => {
