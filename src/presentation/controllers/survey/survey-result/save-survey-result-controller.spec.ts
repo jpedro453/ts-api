@@ -31,10 +31,20 @@ const makeFakeSurvey = (): ISurveyModel => ({
 })
 
 const makeFakeSurveyResult = (): ISurveyResultModel => ({
-    id: 'valid_id',
     survey_id: 'valid_survey_id',
-    account_id: 'valid_account_id',
-    answer: 'valid_answer',
+    question: 'any_question',
+    answers: [
+        {
+            answer: 'any_answer',
+            count: 1,
+            percent: 50
+        },
+        {
+            answer: 'other_answer',
+            count: 1,
+            percent: 50
+        }
+    ],
     date: new Date()
 })
 

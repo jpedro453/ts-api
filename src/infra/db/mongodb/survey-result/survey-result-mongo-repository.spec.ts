@@ -1,4 +1,4 @@
-import { Collection } from 'mongodb'
+import { Collection, ObjectId } from 'mongodb'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { SurveyResultMongoRepository } from './survey-result-mongo-repository'
 import MockDate from 'mockdate'
@@ -71,6 +71,7 @@ describe('Survey Result Mongo Repository', () => {
             const accountMapped = MongoHelper.map(account)
 
             const sut = makeSut()
+
             const surveyResult = await sut.save({
                 survey_id: surveyMapped.id,
                 account_id: accountMapped.id,
@@ -78,8 +79,9 @@ describe('Survey Result Mongo Repository', () => {
                 date: new Date()
             })
             expect(surveyResult).toBeTruthy()
-            expect(surveyResult.id).toBeTruthy()
-            expect(surveyResult.answer).toBe(surveyMapped.answers[0].answer)
+            expect(surveyResult.survey_id).toEqual(surveyMapped.id)
+            expect(surveyResult.answers[0].count).toBe(1)
+            expect(surveyResult.answers[0].percent).toBe(100)
         })
 
         test('Should update an survey result if its not new', async () => {
@@ -90,8 +92,8 @@ describe('Survey Result Mongo Repository', () => {
             const accountMapped = MongoHelper.map(account)
 
             const res = await surveyResultCollection.insertOne({
-                survey_id: surveyMapped.id,
-                account_id: accountMapped.id,
+                survey_id: new ObjectId(surveyMapped.id),
+                account_id: new ObjectId(accountMapped.id),
                 answer: surveyMapped.answers[0].answer,
                 date: new Date()
             })
@@ -103,10 +105,14 @@ describe('Survey Result Mongo Repository', () => {
                 answer: surveyMapped.answers[1].answer,
                 date: new Date()
             })
-            expect(surveyResult).toBeTruthy()
+            console.log(surveyResult.answers[0])
+            console.log(surveyMapped.answers[1])
             const resultID = await MongoHelper.getCollectionItemById('surveyResults', res.insertedId)
-            expect(surveyResult.id).toStrictEqual(resultID._id)
-            expect(surveyResult.answer).toBe(surveyMapped.answers[1].answer)
+            expect(surveyResult).toBeTruthy()
+            expect(surveyResult.survey_id).toEqual(surveyMapped.id)
+            expect(surveyResult.answers[0].answer).toBe(surveyMapped.answers[1].answer)
+            expect(surveyResult.answers[0].count).toBe(1)
+            expect(surveyResult.answers[0].percent).toBe(100)
         })
     })
 })
