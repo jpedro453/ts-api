@@ -82,6 +82,8 @@ describe('Survey Result Mongo Repository', () => {
             expect(surveyResult.survey_id).toEqual(surveyMapped.id)
             expect(surveyResult.answers[0].count).toBe(1)
             expect(surveyResult.answers[0].percent).toBe(100)
+            expect(surveyResult.answers[1].count).toBe(0)
+            expect(surveyResult.answers[1].percent).toBe(0)
         })
 
         test('Should update an survey result if its not new', async () => {
@@ -105,14 +107,14 @@ describe('Survey Result Mongo Repository', () => {
                 answer: surveyMapped.answers[1].answer,
                 date: new Date()
             })
-            console.log(surveyResult.answers[0])
-            console.log(surveyMapped.answers[1])
             const resultID = await MongoHelper.getCollectionItemById('surveyResults', res.insertedId)
             expect(surveyResult).toBeTruthy()
             expect(surveyResult.survey_id).toEqual(surveyMapped.id)
             expect(surveyResult.answers[0].answer).toBe(surveyMapped.answers[1].answer)
             expect(surveyResult.answers[0].count).toBe(1)
             expect(surveyResult.answers[0].percent).toBe(100)
+            expect(surveyResult.answers[1].count).toBe(0)
+            expect(surveyResult.answers[1].percent).toBe(0)
         })
     })
 })
