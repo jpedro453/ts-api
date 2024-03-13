@@ -4,8 +4,9 @@ import { ISaveSurveyResultModel } from '@/domain/useCases/survey/save-survey-res
 import { MongoHelper } from '../helpers/mongo-helper'
 import { ObjectId } from 'mongodb'
 import { QueryBuilder } from '../helpers/query-builder'
+import { ILoadSurveyResultRepository } from '@/data/protocols/db/survey/load-survey-result-repository'
 
-export class SurveyResultMongoRepository implements ISaveSurveyResultRepository {
+export class SurveyResultMongoRepository implements ISaveSurveyResultRepository, ILoadSurveyResultRepository {
     async save(data: ISaveSurveyResultModel): Promise<ISurveyResultModel> {
         const surveyResultCollection = await MongoHelper.getCollection('surveyResults')
 
@@ -26,6 +27,11 @@ export class SurveyResultMongoRepository implements ISaveSurveyResultRepository 
             }
         )
         const surveyResult = await this.loadSurveyById(data.survey_id)
+        return surveyResult
+    }
+
+    async loadBySurveyId(surveyId: string): Promise<ISurveyResultModel> {
+        const surveyResult = await this.loadSurveyById(surveyId)
         return surveyResult
     }
 
