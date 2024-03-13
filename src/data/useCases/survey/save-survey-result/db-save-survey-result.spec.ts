@@ -3,6 +3,7 @@ import MockDate from 'mockdate'
 import { ISaveSurveyResultModel } from '@/domain/useCases/survey/save-survey-result'
 import { ISurveyResultModel } from '@/domain/models/survey-result'
 import { ISaveSurveyResultRepository } from '@/data/protocols/db/survey/save-survey-result-repository'
+import { ILoadSurveyResultRepository } from '@/data/protocols/db/survey/load-survey-result-repository'
 
 const makeFakeSurveyResultData = (): ISaveSurveyResultModel => ({
     survey_id: 'any_survey_id',
@@ -32,23 +33,34 @@ const makeFakeSurveyResult = (): ISurveyResultModel => ({
 
 const makeSaveSurveyRepository = (): ISaveSurveyResultRepository => {
     class SaveSurveyResultRepositoryStub implements ISaveSurveyResultRepository {
-        async save(data: ISaveSurveyResultModel): Promise<ISurveyResultModel> {
-            return new Promise((resolve) => resolve(makeFakeSurveyResult()))
+        async save(data: ISaveSurveyResultModel): Promise<void> {
+            return new Promise((resolve) => resolve())
         }
     }
     return new SaveSurveyResultRepositoryStub()
 }
 
+const makeLoadSurveyRepository = (): ILoadSurveyResultRepository => {
+    class LoadSurveyResultRepositoryStub implements ILoadSurveyResultRepository {
+        async loadBySurveyId(surveyId: string): Promise<ISurveyResultModel> {
+            return new Promise((resolve) => resolve(makeFakeSurveyResult()))
+        }
+    }
+    return new LoadSurveyResultRepositoryStub()
+}
+
 interface ISutTypes {
     sut: DbSaveSurveyResult
     saveSurveyResultRepositoryStub: ISaveSurveyResultRepository
+    loadSurveyResultRepositoryStub: ILoadSurveyResultRepository
 }
 
 const makeSut = (): ISutTypes => {
     const saveSurveyResultRepositoryStub = makeSaveSurveyRepository()
-    const sut = new DbSaveSurveyResult(saveSurveyResultRepositoryStub)
+    const loadSurveyResultRepositoryStub = makeLoadSurveyRepository()
+    const sut = new DbSaveSurveyResult(saveSurveyResultRepositoryStub, loadSurveyResultRepositoryStub)
 
-    return { sut, saveSurveyResultRepositoryStub }
+    return { sut, saveSurveyResultRepositoryStub, loadSurveyResultRepositoryStub }
 }
 
 describe('DbSaveSurvey Use Case', () => {
@@ -72,6 +84,25 @@ describe('DbSaveSurvey Use Case', () => {
         const { sut, saveSurveyResultRepositoryStub } = makeSut()
 
         jest.spyOn(saveSurveyResultRepositoryStub, 'save').mockReturnValueOnce(
+            new Promise((resolve, reject) => reject(new Error()))
+        )
+
+        const promise = sut.save(makeFakeSurveyResultData())
+        await expect(promise).rejects.toThrow()
+    })
+
+    test('Should call LoadSurveyResultRepository with correct values', async () => {
+        const { sut, loadSurveyResultRepositoryStub } = makeSut()
+        const loadSpy = jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
+        const surveyResultData = makeFakeSurveyResultData()
+        await sut.save(surveyResultData)
+        expect(loadSpy).toHaveBeenCalledWith(surveyResultData.survey_id)
+    })
+
+    test('Should throw if LoadSurveyResultRepository throws', async () => {
+        const { sut, loadSurveyResultRepositoryStub } = makeSut()
+
+        jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId').mockReturnValueOnce(
             new Promise((resolve, reject) => reject(new Error()))
         )
 

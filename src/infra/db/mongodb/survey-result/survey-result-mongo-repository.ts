@@ -7,7 +7,7 @@ import { QueryBuilder } from '../helpers/query-builder'
 import { ILoadSurveyResultRepository } from '@/data/protocols/db/survey/load-survey-result-repository'
 
 export class SurveyResultMongoRepository implements ISaveSurveyResultRepository, ILoadSurveyResultRepository {
-    async save(data: ISaveSurveyResultModel): Promise<ISurveyResultModel> {
+    async save(data: ISaveSurveyResultModel): Promise<void> {
         const surveyResultCollection = await MongoHelper.getCollection('surveyResults')
 
         await surveyResultCollection.findOneAndUpdate(
@@ -26,8 +26,6 @@ export class SurveyResultMongoRepository implements ISaveSurveyResultRepository,
                 returnDocument: 'after'
             }
         )
-        const surveyResult = await this.loadSurveyById(data.survey_id)
-        return surveyResult
     }
 
     async loadBySurveyId(surveyId: string): Promise<ISurveyResultModel> {
