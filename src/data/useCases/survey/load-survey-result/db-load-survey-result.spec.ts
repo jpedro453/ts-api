@@ -3,6 +3,7 @@ import { DbLoadSurveyResult } from './db-load-survey-result'
 import { ILoadSurveyResultRepository } from '@/data/protocols/db/survey/load-survey-result-repository'
 import { ILoadSurveyByIdRepository } from '@/data/protocols/db/survey/load-survey-by-id-repository'
 import { ISurveyModel } from '@/domain/models/survey'
+import MockDate from 'mockdate'
 
 const makeFakeSurvey = (): ISurveyModel => {
     return {
@@ -69,6 +70,12 @@ const makeSut = (): ISutTypes => {
 }
 
 describe('DbLoadSurveyResultUseCase', () => {
+    beforeAll(() => {
+        MockDate.set(new Date())
+    })
+    afterAll(() => {
+        MockDate.reset()
+    })
     test('Should call LoadSurveyResultRepository', async () => {
         const { sut, loadSurveyResultRepositoryStub } = makeSut()
 
