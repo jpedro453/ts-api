@@ -1,10 +1,14 @@
 import { ILoadSurveyById } from '@/domain/useCases/survey/load-survey-by-id'
 import { IController, IHttpRequest, IHttpResponse } from '../../add-survey/add-survey-controller-protocols'
-import { forbidden, serverError } from '@/presentation/helpers/http/http-helper'
+import { forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { InvalidParamError } from '@/presentation/errors'
+import { ILoadSurveyResult } from '@/domain/useCases/survey/load-survey-result'
 
 export class LoadSurveyResultController implements IController {
-    constructor(private readonly loadSurveyById: ILoadSurveyById) {}
+    constructor(
+        private readonly loadSurveyById: ILoadSurveyById,
+        private readonly loadSurveyResult: ILoadSurveyResult
+    ) {}
 
     async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
         try {
@@ -13,6 +17,7 @@ export class LoadSurveyResultController implements IController {
             if (!survey) {
                 return forbidden(new InvalidParamError('survey_id'))
             }
+            await this.loadSurveyResult.load(survey_id)
             return null
         } catch (error) {
             return serverError(error)
