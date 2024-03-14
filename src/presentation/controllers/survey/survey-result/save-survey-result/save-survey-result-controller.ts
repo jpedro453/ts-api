@@ -1,5 +1,5 @@
 import { ILoadSurveyById } from '@/domain/useCases/survey/load-survey-by-id'
-import { IController, IHttpRequest, IHttpResponse } from '../add-survey/add-survey-controller-protocols'
+import { IController, IHttpRequest, IHttpResponse } from '../../add-survey/add-survey-controller-protocols'
 import { forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { InvalidParamError } from '@/presentation/errors'
 import { ISaveSurveyResult } from '@/domain/useCases/survey/save-survey-result'
