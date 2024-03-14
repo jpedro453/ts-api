@@ -2,6 +2,8 @@ import { ILoadSurveyById } from '@/domain/useCases/survey/load-survey-by-id'
 import { IController, IHttpRequest } from '../../add-survey/add-survey-controller-protocols'
 import { LoadSurveyResultController } from './load-survey-result-controller'
 import { ISurveyModel } from '../../load-surveys/load-surveys.protocols'
+import { forbidden } from '@/presentation/helpers/http/http-helper'
+import { InvalidParamError } from '@/presentation/errors'
 
 const makeFakeRequest = (): IHttpRequest => ({
     params: {
@@ -49,5 +51,11 @@ describe('LoadSurveyResult Controller', () => {
         const loadByIdSpy = jest.spyOn(loadSurveyByIdStub, 'loadById')
         await sut.handle(makeFakeRequest())
         expect(loadByIdSpy).toHaveBeenCalledWith('any_survey_id')
+    })
+    test('Should return 403 if LoadSurveyById returns null', async () => {
+        const { sut, loadSurveyByIdStub } = makeSut()
+        jest.spyOn(loadSurveyByIdStub, 'loadById').mockReturnValueOnce(Promise.resolve(null))
+        const response = await sut.handle(makeFakeRequest())
+        expect(response).toEqual(forbidden(new InvalidParamError('survey_id')))
     })
 })
