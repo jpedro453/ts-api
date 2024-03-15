@@ -1,6 +1,6 @@
 {
     "name": "ts-api",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "description": "NojeJs Rest API using TDD, Clean architecture and Typescript",
     "main": "index.js",
     "scripts": {
